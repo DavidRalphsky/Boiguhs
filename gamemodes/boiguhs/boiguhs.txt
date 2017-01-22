@@ -1,0 +1,7 @@
+"boiguhs"
+{
+	"title"			"BOIGUHS!"
+	"maps"			"^boiguhs_"
+	"menusystem"	"1"
+	"author_name"	"David Ralphsky"
+}

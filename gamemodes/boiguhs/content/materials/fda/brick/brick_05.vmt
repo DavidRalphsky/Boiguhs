@@ -1,0 +1,6 @@
+"LightmappedGeneric"
+{
+"$basetexture" "fda/brick/brick_05"
+"$bumpmap" "fda/brick/brick_05_normal"
+"$surfaceprop" "brick"
+}

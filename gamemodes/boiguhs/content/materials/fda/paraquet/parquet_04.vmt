@@ -1,0 +1,6 @@
+"LightmappedGeneric"
+{
+"$basetexture" "fda/parquet/parquet_04"
+"$bumpmap" "fda/parquet/parquet_04_normal"
+"$surfaceprop" "wood"
+}
