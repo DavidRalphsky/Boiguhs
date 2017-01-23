@@ -36,8 +36,10 @@ function ENT:Initialize()
 	
 	self.Entity:SetCollisionBounds(Vector(-30,-30,0), Vector(30,30,60)) -- Dav
 	
+	if SERVER then
 	local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
 	self.Request = table.Random(burgers)
+	end
 end
 
 function ENT:Draw()
