@@ -97,7 +97,9 @@ function ENT:FindFood(num)
 		if self.Ent:IsOnFire() then self:Ignite(60) end
 		self.Leaving = true
 		self:EmitSound("vo/ravenholm/madlaugh0"..math.random(1,4)..".wav",75,130)
-	end 
+	else
+		self:FindFood(num+1)	
+	end
 end
 
 function ENT:ChaseEnemy( options )
