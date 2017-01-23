@@ -148,11 +148,8 @@ function ENT:OnInjured(dmg)
 		self.Ent.Claimed = false
 		self.Ent:GetPhysicsObject():Wake()	
 	end
-	self:Remove()
-end
-
-function ENT:OnRemove()
-		if SERVER then
+	
+	if SERVER then
 		local body = ents.Create("boiguhs_ratcorpse")
 		body:SetPos(self:LocalToWorld(Vector(0,0,5)))
 		body:SetAngles(self:GetAngles())
@@ -164,6 +161,8 @@ function ENT:OnRemove()
 			end		
 		end)
 	end
+	
+	self:Remove()
 end
 
 
