@@ -1,6 +1,5 @@
 function GM:PlayerInitialSpawn(ply)
 	ply:SetModel("models/player/group01/male_0"..math.random(1,9)..".mdl")
-	ply:Give("weapon_physcannon")
 	
 	ply:SetTeam(1)
 	ply:SetGravity(1)
@@ -8,25 +7,24 @@ function GM:PlayerInitialSpawn(ply)
 	ply:SetRunSpeed(150)
 	ply:SetNoCollideWithTeammates(true)
 	
-	timer.Simple(1,function()
+	local hat = ents.Create("prop_physics")
+	hat:SetModel("models/props/cs_office/snowman_hat.mdl")
+	hat:SetPos(ply:LocalToWorld(Vector(1.4,0,70)))
+	hat:SetModelScale(hat:GetModelScale() * 0.80)
+	hat:SetAngles(Angle(0,-90,0))
+	hat:SetSolid(SOLID_NONE)
+	hat:SetParent(ply,1)
+	
+	timer.Simple(1,function()		
 		ply:SetMaxHealth(2147483647)
 		ply:SetHealth(2147483647)
-	end)
-	
+	end)	
 end
---[[local CMoveData = FindMetaTable("CMoveData")
-function CMoveData:RemoveKeys(keys)
-	local newbuttons = bit.band(self:GetButtons(), bit.bnot(keys))
-	self:SetButtons(newbuttons)
+
+function GM:PlayerLoadout(ply)
+	ply:Give("weapon_physcannon")
+	return true
 end
-hook.Add("SetupMove", "BG_DisableJump&Crouch", function(ply,mvd,cmd)
-	if mvd:KeyDown(IN_JUMP) then
-		mvd:RemoveKeys(IN_JUMP)`
-	end
-	if mvd:KeyDown(IN_DUCK) then
-		mvd:RemoveKeys(IN_DUCK)
-	end
-end)--]]
 
 function BlockSuicide(ply)
 	return false

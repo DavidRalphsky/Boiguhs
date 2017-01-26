@@ -8,6 +8,9 @@ function ENT:Initialize()
 	self:SetRenderMode(4)
 	
 	if SERVER then
+		local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
+		self.Request = table.Random(burgers)
+	
 		self:SetModel("models/Humans/Group01/male_02.mdl")
 		local models = {"models/props_vehicles/car004a_physics.mdl","models/props_vehicles/car003a_physics.mdl","models/props_vehicles/car005a_physics.mdl"}
 		
@@ -35,9 +38,6 @@ function ENT:Initialize()
 	self.Max	   = 110
 	
 	self.Entity:SetCollisionBounds(Vector(-30,-30,0), Vector(30,30,60)) -- Dav
-	
-	local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
-	self.Request = table.Random(burgers)
 end
 
 function ENT:Draw()

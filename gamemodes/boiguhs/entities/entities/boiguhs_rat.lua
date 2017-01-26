@@ -97,6 +97,8 @@ function ENT:FindFood(num)
 		if self.Ent:IsOnFire() then self:Ignite(60) end
 		self.Leaving = true
 		self:EmitSound("vo/ravenholm/madlaugh0"..math.random(1,4)..".wav",75,130)
+	else
+		self:FindFood(num+1)
 	end 
 end
 
@@ -146,11 +148,8 @@ function ENT:OnInjured(dmg)
 		self.Ent.Claimed = false
 		self.Ent:GetPhysicsObject():Wake()	
 	end
-	self:Remove()
-end
-
-function ENT:OnRemove()
-		if SERVER then
+	
+	if SERVER then
 		local body = ents.Create("boiguhs_ratcorpse")
 		body:SetPos(self:LocalToWorld(Vector(0,0,5)))
 		body:SetAngles(self:GetAngles())
@@ -162,6 +161,8 @@ function ENT:OnRemove()
 			end		
 		end)
 	end
+	
+	self:Remove()
 end
 
 

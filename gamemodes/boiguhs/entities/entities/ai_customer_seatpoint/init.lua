@@ -18,8 +18,10 @@ function ENT:Initialize()
 end
 
 function ENT:Request(mat)
-	self.Entity:SetRequest(true)
-	self.Entity:SetSprite(mat)
+	if SERVER then
+		self.Entity:SetRequest(true)
+		self.Entity:SetSprite(mat)
+	end
 end
 
 function ENT:ClearReq()

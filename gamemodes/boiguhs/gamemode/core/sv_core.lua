@@ -93,14 +93,14 @@ function GM:CallTruck()
 	end
 end
 
-//local started = false
+local started = false
 function GM:StartGame()
-	//if started then return false end
-	//started = true
+	if started then return false end
+	started = true
 	
 	game.CleanUpMap()
 	PrintMessage(HUD_PRINTCENTER, "Boiguhs has started! You have 30 seconds to prepare!")
-	
+		
 	timer.UnPause("SpawnBoiguhCustomer")
 	timer.UnPause("SpawnBoiguhCar")
 
