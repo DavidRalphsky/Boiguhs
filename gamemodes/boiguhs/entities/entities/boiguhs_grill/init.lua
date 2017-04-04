@@ -1,10 +1,26 @@
 AddCSLuaFile( "shared.lua" )
 include("shared.lua")
 
+function ENT:KeyValue(k,v)
+	if(k == "model") then 
+		self.Model = v
+	elseif(k == "material") then 
+		self.Material = v 
+	end
+end
+
 function ENT:Initialize()
-	self:SetModel("models/hunter/plates/plate1x5.mdl")
+	if self.Model then
+		self:SetModel(self.Model)
+	else
+		self:SetModel("models/hunter/plates/plate1x5.mdl")
+	end
 	
-	self:SetMaterial("phoenix_storms/gear")
+	if self.Material then
+		self:SetMaterial(self.Material)
+	else
+		self:SetMaterial("phoenix_storms/gear")
+	end
 
 	self:SetMoveType(MOVETYPE_NONE)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -13,14 +29,6 @@ function ENT:Initialize()
 
 	local phys = self:GetPhysicsObject()
 	if (IsValid(phys)) then phys:EnableMotion(false) end
-end
-
-function ENT:KeyValue(k,v)
-	if(k == "model") then 
-		self:SetModel(v)
-	elseif(k == "material") then 
-		self:SetMaterial(v) 
-	end
 end
 
 function ENT:Touch(ply)
