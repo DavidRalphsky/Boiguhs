@@ -15,6 +15,14 @@ function ENT:Initialize()
 	if (IsValid(phys)) then phys:EnableMotion(false) end
 end
 
+function ENT:KeyValue(k,v)
+	if(k == "model") then 
+		self:SetModel(v)
+	elseif(k == "material") then 
+		self:SetMaterial(v) 
+	end
+end
+
 function ENT:Touch(ply)
 	if(ply:IsPlayer() and ply:IsValid()) then
 		ply:Ignite(10)
