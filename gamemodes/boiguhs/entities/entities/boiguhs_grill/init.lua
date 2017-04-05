@@ -9,6 +9,7 @@ function ENT:KeyValue(k,v)
 	end
 end
 
+
 function ENT:Initialize()
 	if self.Model then
 		self:SetModel(self.Model)
@@ -21,7 +22,7 @@ function ENT:Initialize()
 	else
 		self:SetMaterial("phoenix_storms/gear")
 	end
-
+		
 	self:SetMoveType(MOVETYPE_NONE)
 	self:SetSolid(SOLID_VPHYSICS)
 		

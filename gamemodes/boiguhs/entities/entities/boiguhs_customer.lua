@@ -4,7 +4,9 @@ ENT.Base 			= "base_nextbot"
 ENT.Spawnable		= false
 
 function ENT:Initialize()	
-	if SERVER then self:SetModel("models/Humans/Group01/male_0"..math.random(1,9)..".mdl") end
+	if SERVER then 		
+		self:SetModel(self.Model or "models/Humans/Group01/male_0"..math.random(1,9)..".mdl") 
+	end
 
 	self:SetHealth(99999)
 	
@@ -218,7 +220,7 @@ function ENT:FindASeat()
 	self.loco:SetDesiredSpeed(100)
 	self:MoveToPos(seats[num]:GetPos())
 	self:StartActivity(ACT_IDLE)
-	self:SetSequence("Silo_Sit")
+	self:SetSequence(self:LookupSequence("Silo_Sit"))
 	self:SetPos(seats[num]:LocalToWorld(Vector(22,4,0)))
 	self:SetAngles(seats[num]:GetAngles())
 	self.Seated = true

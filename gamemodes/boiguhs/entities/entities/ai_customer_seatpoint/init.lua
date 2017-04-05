@@ -2,6 +2,14 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
 
+function ENT:KeyValue(k,v)
+	if(k == "model") then 
+		self.Model = v
+	elseif(k == "material") then 
+		self.Material = v 
+	end
+end
+
 function ENT:Initialize()
 	self:SetModel("models/props_c17/chair02a.mdl")
 	self:SetPos(self:LocalToWorld(Vector(0,0,10)))

@@ -1,12 +1,3 @@
---[[local model = "models/Humans/Group01/male_07.mdl"//"No Model"
-hook.Add("EntityKeyValue","boiguhs_keyvalues",function(ent,k,v)
-	if ent:GetClass()=="boiguhs_customerspawner" and string.sub(k,1,5) == 'model' then
-		if table.Count(ent.Models)==nil then ent.Models = {v} else
-			ent.Models[#ent.Models+1] = v
-		end
-	end
-end)--]]
-
 local difficulty = 1
 function GM:SetDifficulty(diff)
 	difficulty = diff
@@ -86,9 +77,7 @@ function GM:CallTruck()
 	if(GAMEMODE:GetMoney() > cost) then
 		GAMEMODE:SubtractMoney(cost)
 		timer.Simple(5, function()
-			local truck = ents.Create("boiguhs_supplytruck")
-			truck:SetPos(ents.FindByClass("ai_truckspawn")[1]:GetPos())
-			truck:Spawn()
+			ents.FindByClass("ai_truckspawn")[1]:SpawnTruck()
 		end)
 	end
 end
