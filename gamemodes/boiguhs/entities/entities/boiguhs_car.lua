@@ -63,7 +63,7 @@ function ENT:OnContact(_ent)
 end
 
 function IsCooked(ent)
-	if GAMEMODE:Debug() then print(ent:GetClass()) PrintTable(ent:GetColor()) end
+	if GAMEMODE:Debug() == 1 then print(ent:GetClass()) PrintTable(ent:GetColor()) end
 	
 	if(IsValid(ent) and ent:GetColor().r > (45+(GAMEMODE:GetDifficulty()*10)) and ent:GetColor().r < (150-(GAMEMODE:GetDifficulty()*10))) then return 1 else return 0 end
 end
@@ -84,7 +84,7 @@ function ENT:ProcessOrder(req,tbl,order)
 		end
 	end
 	
-	if GAMEMODE:Debug() then
+	if GAMEMODE:Debug() == 1 then
 		print("======")
 		print("ORDER DEBUG!")
 		print("------")
@@ -166,7 +166,7 @@ function ENT:CalcPay(tbl)
 	end)
 
 	GAMEMODE:AddMorale(num)
-	if GAMEMODE:Debug() then print("Morale set to "..GAMEMODE:GetMorale()) end
+	if GAMEMODE:Debug() == 1 then print("Morale set to "..GAMEMODE:GetMorale()) end
 	
 	for i=1, num do
 		if SERVER then

@@ -8,7 +8,7 @@ function GM:GetDifficulty()
 end
 
 concommand.Add("boiguhs_setdifficulty", function(ply,cmd,args)
-	if(!ply:IsAdmin()) then return end
+	if(!ply:IsAdmin() or args[1] == nil) then return end
 	if(tonumber(args[1]) > 4 or tonumber(args[1]) < 0) then 
 		print("Invalid difficulty!")
 		return
@@ -43,7 +43,7 @@ function GM:GetMorale()
 end
 
 concommand.Add("boiguhs_setmorale", function(ply,cmd,args)
-	if(!ply:IsAdmin()) then return end
+	if(!ply:IsAdmin() or args[1] == nil) then return end
 	
 	GAMEMODE:SetMorale(args[1])
 end)
@@ -66,7 +66,7 @@ function GM:GetMoney()
 end
 
 concommand.Add("boiguhs_setmoney", function(ply,cmd,args)
-	if(!ply:IsAdmin()) then return end
+	if(!ply:IsAdmin() or tonumber(args[1]) == nil) then return end
 	
 	GAMEMODE:SetMoney(args[1])
 end)
@@ -81,9 +81,9 @@ function GM:Debug()
 end
 
 concommand.Add("boiguhs_debug", function(ply,cmd,args)
-	if(!ply:IsAdmin()) then return end
+	if(!ply:IsAdmin() or args[1] == nil) then return end
 	if(tonumber(args[1]) > 1 or tonumber(args[1]) < 0) then
-		print("Invalid input")
+		print("Invalid input!")
 		return
 	end
 	
