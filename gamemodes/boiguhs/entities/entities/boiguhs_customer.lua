@@ -18,7 +18,7 @@ function ENT:Initialize()
 	self.Request   = ""	
 	self.Pos       = self:GetPos()
 	self.Num	   = 0
-	
+
 	self.Entity:SetCollisionBounds(Vector(-4,-4,0), Vector(4,4,64))
 	
 	util.PrecacheSound("vo/npc/male01/pain01.wav")
@@ -33,16 +33,21 @@ function ENT:Initialize()
 end
 
 function ENT:OnContact(_ent)
-	if(self.Seated == false) then return end
+	if !self.Seated then return end
 	
 	local ent = _ent
-	if(ent:GetParent():IsValid()) then ent = _ent:GetParent() end
-	if(#ent:GetChildren()<1) then return end
 	
-	if(ent:GetClass()=="boiguh_bot" and ent.Active == false) then
+	if(ent:GetParent():IsValid()) then ent = _ent:GetParent() end
+	if(#ent:GetChildren()<1)      then return end
+	
+	if(ent:GetClass()=="boiguh_bot" and !ent.Active) then
 		for i=1, #ent:GetChildren() do
-			if(ent:IsOnFire() or ent:GetChildren()[i]:IsOnFire()) then self:EmitSound("ambient/fire/ignite.wav") self.Run = true self:Ignite(60) end
+			if(ent:IsOnFire() or ent:GetChildren()[i]:IsOnFire()) then 
+				self:EmitSound("ambient/fire/ignite.wav") self.Run = true 
+				self:Ignite(60) 
+			end
 		end
+		
 		self:EmitSound("vo/SandwichEat09.mp3",65,math.random(80,150))
 		self:CalcPay(ent:GetChildren())
 		ent:Remove()
@@ -50,9 +55,9 @@ function ENT:OnContact(_ent)
 end
 
 function IsCooked(ent)
-	print(ent:GetClass())
-	PrintTable(ent:GetColor())
-	if(IsValid(ent) and ent:GetColor().r > 65 and ent:GetColor().r < 110) then return 1 else return 0 end
+	if GAMEMODE:Debug() then print(ent:GetClass()) PrintTable(ent:GetColor()) end
+	
+	if(IsValid(ent) and ent:GetColor().r > (45+(GAMEMODE:GetDifficulty()*10)) and ent:GetColor().r < (150-(GAMEMODE:GetDifficulty()*10))) then return 1 else return 0 end
 end
 
 function ENT:ProcessOrder(req,tbl,order)
@@ -73,21 +78,23 @@ function ENT:ProcessOrder(req,tbl,order)
 		end
 	end
 	
-	print("======")
-	print("ORDER DEBUG!")
-	print("------")
-	print("req - (Food request)")
-	print(req)
-	print("------")
-	print("tbl - (Table of bun's children as entities)")
-	PrintTable(tbl)
-	print("------")	
-	print("order - (Table of order as classnames)")
-	PrintTable(order)
-	print("------")
-	print("Max possible: "..#order)
-	print("Payed: "..num)
-	print("======")
+	if GAMEMODE:Debug() then
+		print("======")
+		print("ORDER DEBUG!")
+		print("------")
+		print("req - (Food request)")
+		print(req)
+		print("------")
+		print("tbl - (Table of bun's children as entities)")
+		PrintTable(tbl)
+		print("------")	
+		print("order - (Table of order as classnames)")
+		PrintTable(order)
+		print("------")
+		print("Max possible: "..#order)
+		print("Payed: "..num)
+		print("======")
+	end
 	
 	return num
 end
@@ -146,6 +153,7 @@ function ENT:CalcPay(tbl)
 
 	
 	GAMEMODE:AddMorale(num)
+	if GAMEMODE:Debug() then print("Morale set to "..GAMEMODE:GetMorale()) end
 	
 	for i=1, num do
 		if SERVER then
@@ -170,7 +178,7 @@ function ENT:RequestRand()
 	self.Seat:Request("boiguhs/"..request)
 	self.Request = request
 	
-	print("I want a "..self.Request)
+	if GAMEMODE:Debug() then print("I want a "..self.Request) end
 end
 
 -- AI stuff

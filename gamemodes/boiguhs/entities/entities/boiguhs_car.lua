@@ -9,10 +9,10 @@ function ENT:Initialize()
 	
 	if SERVER then
 		local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
-		self.Request = table.Random(burgers)
-	
-		self:SetModel("models/Humans/Group01/male_02.mdl")
 		local models = {"models/props_vehicles/car004a_physics.mdl","models/props_vehicles/car003a_physics.mdl","models/props_vehicles/car005a_physics.mdl"}
+		
+		self.Request = table.Random(burgers)	
+		self:SetModel("models/Humans/Group01/male_02.mdl")
 		
 		local car = ents.Create("prop_physics")
 		car:SetModel(table.Random(models))
@@ -37,7 +37,7 @@ function ENT:Initialize()
 	self.Min 	   = 75
 	self.Max	   = 110
 	
-	self.Entity:SetCollisionBounds(Vector(-30,-30,0), Vector(30,30,60)) -- Dav
+	self.Entity:SetCollisionBounds(Vector(-30,-30,0), Vector(30,30,60))
 end
 
 function ENT:Draw()
@@ -63,7 +63,9 @@ function ENT:OnContact(_ent)
 end
 
 function IsCooked(ent)
-	if(IsValid(ent) and ent:GetColor().r < 65 and ent:GetColor().r > 110) then return 1 else return 0 end
+	if GAMEMODE:Debug() then print(ent:GetClass()) PrintTable(ent:GetColor()) end
+	
+	if(IsValid(ent) and ent:GetColor().r > (45+(GAMEMODE:GetDifficulty()*10)) and ent:GetColor().r < (150-(GAMEMODE:GetDifficulty()*10))) then return 1 else return 0 end
 end
 
 function ENT:ProcessOrder(req,tbl,order)
@@ -82,21 +84,23 @@ function ENT:ProcessOrder(req,tbl,order)
 		end
 	end
 	
-	print("======")
-	print("ORDER DEBUG!")
-	print("------")
-	print("req - (Food request)")
-	print(req)
-	print("------")
-	print("tbl - (Table of bun's children as entities)")
-	PrintTable(tbl)
-	print("------")	
-	print("order - (Table of order as classnames)")
-	PrintTable(order)
-	print("------")
-	print("Max possible: "..#order)
-	print("Payed: "..num)
-	print("======")
+	if GAMEMODE:Debug() then
+		print("======")
+		print("ORDER DEBUG!")
+		print("------")
+		print("req - (Food request)")
+		print(req)
+		print("------")
+		print("tbl - (Table of bun's children as entities)")
+		PrintTable(tbl)
+		print("------")	
+		print("order - (Table of order as classnames)")
+		PrintTable(order)
+		print("------")
+		print("Max possible: "..#order)
+		print("Payed: "..num)
+		print("======")
+	end
 	
 	return num
 end
@@ -134,15 +138,14 @@ function ENT:CalcPay(tbl)
 		
 	elseif(req == "vegan") then
 		order = {"boiguh_tom","boiguh_let","boiguh_let"}
-	
 	end
 	
 	local num = self:ProcessOrder(self.Request,tbl,order)
 	
 	local positive = {"vo/npc/male01/answer32.wav","vo/npc/male01/nice.wav"}
-	local negative = {"vo/npc/male01/question26.wav"}	
+	local negative = {"vo/npc/male01/question26.wav"}
 	
-	timer.Simple(1.5, function()	
+	timer.Simple(1.5, function()
 		if num == 0 then
 			self:EmitSound(table.Random(negative),80)
 		elseif(num == #order) then
@@ -162,8 +165,8 @@ function ENT:CalcPay(tbl)
 		self.Leaving = true
 	end)
 
-	
 	GAMEMODE:AddMorale(num)
+	if GAMEMODE:Debug() then print("Morale set to "..GAMEMODE:GetMorale()) end
 	
 	for i=1, num do
 		if SERVER then
@@ -187,11 +190,13 @@ function ENT:RunBehaviour()
 	while (true) do
 		if(self.Searching) then
 			self:FindStop()
+			
 		elseif(self.Leaving) then
 			self:SetRenderMode(4)
 			self.loco:SetDesiredSpeed(200)
 			self:MoveToPos(self.Stop.Exit)
 			self:Remove()	
+			
 		elseif(self.Run) then
 			self:StartActivity(ACT_RUN)
 			self.loco:SetDesiredSpeed(800)

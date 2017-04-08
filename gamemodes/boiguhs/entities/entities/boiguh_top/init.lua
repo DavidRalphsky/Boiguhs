@@ -3,6 +3,9 @@ AddCSLuaFile( "shared.lua" )
 include("shared.lua")
 
 function ENT:Initialize()
+	self.Name = "Top Bun"
+	self.Desc = "Final piece of a Boiguh"
+	
 	self:SetModel("models/hunter/plates/plate025x025.mdl")
 
 	if SERVER then

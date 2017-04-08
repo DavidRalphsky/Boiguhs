@@ -5,13 +5,11 @@ include("shared.lua")
 function ENT:KeyValue(k,v)
 	if(k == "model") then 
 		self.Model = v
-	elseif(k == "material") then 
-		self.Material = v 
 	end
 end
 
 function ENT:Initialize()
-	self:SetModel("models/props_c17/chair02a.mdl")
+	self:SetModel(self.Model or "models/props_c17/chair02a.mdl")
 	self:SetPos(self:LocalToWorld(Vector(0,0,10)))
 	self:SetMoveType(MOVETYPE_NONE)
 	self:SetSolid(SOLID_VPHYSICS)
@@ -22,7 +20,7 @@ function ENT:Initialize()
 	local phys = self:GetPhysicsObject()
 	if (IsValid(phys)) then phys:EnableMotion(false) end
 	
-	self.Taken   = false
+	self.Taken = false
 end
 
 function ENT:Request(mat)

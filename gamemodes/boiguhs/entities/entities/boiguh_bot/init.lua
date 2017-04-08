@@ -3,6 +3,9 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
+	self.Name = "Bottom Bun"
+	self.Desc = "Base for a Boiguh"
+
 	self:SetModel("models/hunter/plates/plate025x025.mdl")
 
 	self:SetMaterial("models/props_wasteland/quarryobjects01")

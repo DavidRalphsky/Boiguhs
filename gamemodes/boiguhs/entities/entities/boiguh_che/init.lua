@@ -1,10 +1,10 @@
-AddCSLuaFile( "shared.lua" )
+AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:Initialize()
 	self:SetModel("models/hunter/plates/plate025x025.mdl")
 
-	self:SetMaterial("phoenix_storms/fender_grey")
+	self:SetMaterial("models/props_c17/metalladder003")
 	self:SetColor(Color(255, 255, 0))
 
 	self:SetMoveType(MOVETYPE_VPHYSICS)

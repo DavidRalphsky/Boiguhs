@@ -1,4 +1,4 @@
-AddCSLuaFile( "shared.lua" )
+AddCSLuaFile("shared.lua")
 include("shared.lua")
 
 function ENT:KeyValue(k,v)
@@ -11,6 +11,8 @@ end
 
 
 function ENT:Initialize()
+	self.Name = "Grill"
+
 	if self.Model then
 		self:SetModel(self.Model)
 	else

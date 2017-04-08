@@ -78,8 +78,8 @@ function ENT:RunBehaviour()
 	end
 end
 
-list.Set( "NPC", "boiguhs_supplytruck", {
+list.Set("NPC", "boiguhs_supplytruck", {
 	Name = "Boiguhs Supply Truck",
 	Class = "boiguhs_supplytruck",
 	Category = "Boiguhs"
-} )
+})

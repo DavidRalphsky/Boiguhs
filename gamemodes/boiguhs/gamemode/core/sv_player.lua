@@ -10,7 +10,7 @@ function GM:PlayerInitialSpawn(ply)
 	timer.Simple(1,function()		
 		ply:SetMaxHealth(2147483647)
 		ply:SetHealth(2147483647)
-	end)	
+	end)
 end
 
 function GM:PlayerLoadout(ply)

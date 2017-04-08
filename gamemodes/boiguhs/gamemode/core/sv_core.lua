@@ -71,9 +71,27 @@ concommand.Add("boiguhs_setmoney", function(ply,cmd,args)
 	GAMEMODE:SetMoney(args[1])
 end)
 
+local qdebug = 0
+function GM:SetDebug(num)
+	qdebug = num
+end
+
+function GM:Debug()
+	return qdebug
+end
+
+concommand.Add("boiguhs_debug", function(ply,cmd,args)
+	if(!ply:IsAdmin()) then return end
+	if(tonumber(args[1]) > 1 or tonumber(args[1]) < 0) then
+		print("Invalid input")
+		return
+	end
+	
+	GAMEMODE:SetDebug(tonumber(args[1]))
+end)
 
 function GM:CallTruck()
-	local cost = 40*GAMEMODE:GetDifficulty()
+	local cost = 40+(GAMEMODE:GetDifficulty()*10)
 	if(GAMEMODE:GetMoney() > cost) then
 		GAMEMODE:SubtractMoney(cost)
 		timer.Simple(5, function()
@@ -83,6 +101,10 @@ function GM:CallTruck()
 end
 
 local started = false
+function GM:GameStarted()
+	return started
+end
+
 function GM:StartGame()
 	if started then return false end
 	started = true
@@ -97,7 +119,7 @@ function GM:StartGame()
 	local num2 = 600
 	
 	if(GAMEMODE:GetDifficulty() == 3) then num2 = 300 end
-	timer.Create("boiguhs_rat",num1,0,function() SpawnARat() end)
+	timer.Create("boiguhs_rat",     num1,0,function() SpawnARat()     end)
 	timer.Create("boiguhs_ratswarm",num2,0,function() SpawnRatSwarm() end)
 end
 
@@ -106,7 +128,9 @@ function SpawnARat()
 	rat:SetPos(Vector(0,0,-60))
 	rat:Spawn()
 		
-	timer.Simple(25,function() if IsValid(rat) then rat:Remove() end end)
+	timer.Simple(25,function() 
+		if IsValid(rat) then rat:Remove() end 
+	end)
 end
 
 function SpawnRatSwarm()
@@ -151,15 +175,15 @@ function SpawnRatSwarm()
 	rat10:Spawn()
 			
 	timer.Simple(25,function() 
-		if IsValid(rat) then rat:Remove() end 
-		if IsValid(rat2) then rat2:Remove() end 
-		if IsValid(rat3) then rat3:Remove() end 
-		if IsValid(rat4) then rat4:Remove() end 
-		if IsValid(rat5) then rat5:Remove() end 
-		if IsValid(rat6) then rat6:Remove() end 
-		if IsValid(rat7) then rat7:Remove() end 
-		if IsValid(rat8) then rat8:Remove() end 
-		if IsValid(rat9) then rat9:Remove() end 
+		if IsValid(rat)   then rat:Remove()   end 
+		if IsValid(rat2)  then rat2:Remove()  end 
+		if IsValid(rat3)  then rat3:Remove()  end 
+		if IsValid(rat4)  then rat4:Remove()  end 
+		if IsValid(rat5)  then rat5:Remove()  end 
+		if IsValid(rat6)  then rat6:Remove()  end 
+		if IsValid(rat7)  then rat7:Remove()  end 
+		if IsValid(rat8)  then rat8:Remove()  end 
+		if IsValid(rat9)  then rat9:Remove()  end 
 		if IsValid(rat10) then rat10:Remove() end 
 	end)
 end
