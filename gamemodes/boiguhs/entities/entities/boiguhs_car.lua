@@ -25,7 +25,8 @@ function ENT:Initialize()
 		self.Driver:SetSequence(self.Driver:LookupSequence("silo_sit"))
 		self.Driver:SetParent(self)
 	end
-
+	
+	math.randomseed(os.time())
 	local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
 	self.Request = table.Random(burgers)	
 	
