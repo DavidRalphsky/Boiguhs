@@ -8,10 +8,8 @@ function ENT:Initialize()
 	self:SetRenderMode(4)
 	
 	if SERVER then
-		local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
 		local models = {"models/props_vehicles/car004a_physics.mdl","models/props_vehicles/car003a_physics.mdl","models/props_vehicles/car005a_physics.mdl"}
 		
-		self.Request = table.Random(burgers)	
 		self:SetModel("models/Humans/Group01/male_02.mdl")
 		
 		local car = ents.Create("prop_physics")
@@ -27,6 +25,9 @@ function ENT:Initialize()
 		self.Driver:SetSequence(self.Driver:LookupSequence("silo_sit"))
 		self.Driver:SetParent(self)
 	end
+
+	local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
+	self.Request = table.Random(burgers)	
 	
 	self:SetHealth(99999)
 	
