@@ -138,19 +138,17 @@ function ENT:CalcPay(tbl)
 	end
 	
 	local num = self:ProcessOrder(self.Request,tbl,order)
-	
 	local positive = {"vo/npc/male01/answer32.wav","vo/npc/male01/nice.wav"}
 	local negative = {"vo/npc/male01/question26.wav"}	
 	
-	timer.Simple(1, function()
-		if num == 0 then
-			self:EmitSound(table.Random(negative),80)
-		elseif(num == #order) then
-			self:EmitSound(table.Random(positive),80)
-		end
-		if(self.IsSick == false and !self.Run) then self.Leaving = true end
-	end)
+	if num == #order then 
+		num = num + 1 
+		timer.Simple(1, function() self:EmitSound(table.Random(positive),80) end)		
 
+		elseif(num == 0) then
+			timer.Simple(1, function() self:EmitSound(table.Random(negative),80) end)
+			num = -5
+	end
 	
 	GAMEMODE:AddMorale(num)
 	if GAMEMODE:Debug() == 1 then print("Morale set to "..GAMEMODE:GetMorale()) end
@@ -169,6 +167,12 @@ function ENT:CalcPay(tbl)
 			money:GetPhysicsObject():SetVelocity((self:GetForward()*150)+(self:GetUp()*150))
 		end
 	end
+	
+	timer.Simple(1, function() 
+		if(self.IsSick == false and !self.Run) then 
+			self.Leaving = true 
+		end 
+	end)
 end
 
 function ENT:RequestRand()

@@ -109,8 +109,10 @@ function GM:StartGame()
 	if started then return false end
 	started = true
 	
-	game.CleanUpMap()
+	timer.Simple(0.1, function() game.CleanUpMap() 
+
 	PrintMessage(HUD_PRINTCENTER, "Boiguhs has started! You have 30 seconds to prepare!")
+	
 		
 	timer.UnPause("SpawnBoiguhCustomer")
 	timer.UnPause("SpawnBoiguhCar")
@@ -121,6 +123,7 @@ function GM:StartGame()
 	if(GAMEMODE:GetDifficulty() == 3) then num2 = 300 end
 	timer.Create("boiguhs_rat",     num1,0,function() SpawnARat()     end)
 	timer.Create("boiguhs_ratswarm",num2,0,function() SpawnRatSwarm() end)
+	end)
 end
 
 function SpawnARat()

@@ -44,8 +44,8 @@ hook.Add("PostPlayerDraw", "boiguhs_accessories", function(ply)
 			draw.SimpleText("HELLO, my name is","CloseCaption_Bold",0,-40,Color(255,255,255,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP)
 			draw.SimpleText(ply:GetName(),"CloseCaption_BoldItalic",0,13,Color(0,0,0,255),TEXT_ALIGN_CENTER,TEXT_ALIGN_TOP)
 		cam.End3D2D()
-	end--]]
-
+	end]]--
+	
 	local attach_id = ply:LookupAttachment("eyes")
 	if not attach_id then return end
 

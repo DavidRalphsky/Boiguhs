@@ -36,42 +36,27 @@ function ENT:Initialize()
 	if !self.Smoke || !self.Smoke:IsValid() then return false end
 	self.Smoke:Spawn()
 	self.Smoke:Activate()
-	self.Smoke:SetPos(self:LocalToWorld(Vector(0,0,20)))
+	self.Smoke:SetPos(self:LocalToWorld(Vector(3,0,23)))
 	self.Smoke:SetAngles(self:LocalToWorldAngles(Angle(90,-90,0)))
 	timer.Simple(0.1,function() self.Smoke:SetParent(self) end)
-	self.Smoke:Fire("TurnOff", "", 0)
+	self.Smoke:Fire("TurnOff")
 end
 
 function ENT:Think()
-	if(self.Picked == true) then
+	if self:IsPlayerHolding() then
+		self.Whoosh:Play()
+		self.Smoke:Fire("TurnOn")
+	
 		local ents = ents.FindInCone(self:LocalToWorld(Vector(0,0,10)), Vector(0,1,0),75,0)
 		for i=1,table.Count(ents) do
 			ents[i]:Extinguish()
 		end
+	else
+		self.Whoosh:Stop()
+		self.Smoke:Fire("TurnOff")
 	end
 end
 
 function ENT:OnRemove()
 	self.Whoosh:Stop()
 end
-
-function FPickup(ply,ent)
-	if(ent:GetClass()=="boiguhs_fireextinguisher" and ent.Picked != true) then
-		ent.Whoosh:Play()
-		ent.Smoke:Fire("TurnOn", "", 0)
-		ent.Picked = true
-		return true
-	end
-end
-hook.Add("GravGunOnPickedUp", "boiguhs_FPickup", FPickup)
-
-function FDrop(ply,ent)
-	if(ent:GetClass()=="boiguhs_fireextinguisher") then
-		ent.Whoosh:Stop()
-		
-		ent.Smoke:Fire("TurnOff", "", 0)
-		ent.Picked = false
-		return true
-	end
-end
-hook.Add("GravGunOnDropped", "boiguhs_FDrop", FDrop)
