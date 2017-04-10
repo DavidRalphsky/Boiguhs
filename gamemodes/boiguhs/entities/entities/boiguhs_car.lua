@@ -7,9 +7,8 @@ function ENT:Initialize()
 	self:SetColor(Color(0,0,0,0))
 	self:SetRenderMode(4)
 	
-	if SERVER then
+	if SERVER then		
 		local models = {"models/props_vehicles/car004a_physics.mdl","models/props_vehicles/car003a_physics.mdl","models/props_vehicles/car005a_physics.mdl"}
-		
 		self:SetModel("models/Humans/Group01/male_02.mdl")
 		
 		local car = ents.Create("prop_physics")
@@ -25,11 +24,7 @@ function ENT:Initialize()
 		self.Driver:SetSequence(self.Driver:LookupSequence("silo_sit"))
 		self.Driver:SetParent(self)
 	end
-	
-	math.randomseed(os.time())
-	local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
-	self.Request = table.Random(burgers)	
-	
+		
 	self:SetHealth(99999)
 	
 	self.Searching = true
@@ -40,6 +35,10 @@ function ENT:Initialize()
 	self.Max	   = 110
 	
 	self.Entity:SetCollisionBounds(Vector(-30,-30,0), Vector(30,30,60))
+	
+	math.randomseed(os.time())
+	local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
+	self.Request = table.Random(burgers)
 end
 
 function ENT:Draw()
@@ -147,25 +146,14 @@ function ENT:CalcPay(tbl)
 	local positive = {"vo/npc/male01/answer32.wav","vo/npc/male01/nice.wav"}
 	local negative = {"vo/npc/male01/question26.wav"}
 	
-	timer.Simple(1.5, function()
-		if num == 0 then
-			self:EmitSound(table.Random(negative),80)
-		elseif(num == #order) then
-			self:EmitSound(table.Random(positive),80)
-		end		
-		
-		timer.Simple(0.5, function()
-			if(self.Explode and SERVER) then
-				local boom = ents.Create("env_explosion")
-				boom:SetPos(self:GetPos())
-				boom:Spawn()
-				boom:Fire("Explode")
-				self:Remove()
-			end
-		end)
-		
-		self.Leaving = true
-	end)
+	if num == #order then 
+		num = num + 1 
+		timer.Simple(1, function() self:EmitSound(table.Random(positive),80) end)		
+
+		elseif(num == 0) then
+			timer.Simple(1, function() self:EmitSound(table.Random(negative),80) end)
+			num = -5
+	end
 
 	GAMEMODE:AddMorale(num)
 	if GAMEMODE:Debug() == 1 then print("Morale set to "..GAMEMODE:GetMorale()) end
@@ -184,6 +172,12 @@ function ENT:CalcPay(tbl)
 			money:GetPhysicsObject():SetVelocity((self:GetRight()*-150)+(self:GetUp()*150))
 		end
 	end
+	
+	timer.Simple(1, function() 
+		if(self.IsSick == false and !self.Run) then 
+			self.Leaving = true 
+		end 
+	end)
 end
 
 
@@ -222,6 +216,7 @@ function ENT:FindStop()
 		self:SetPos(self.Stop:GetPos())
 		self:SetAngles(self.Stop:GetAngles())
 		self:SetRenderMode(0)
+		if GAMEMODE:Debug() == 1 then print("I want a "..self.Request) end
 		timer.Simple(120, function() if(IsValid(self) and !self.Leaving) then GAMEMODE:SubtractMorale(5) self.Leaving = true end end)
 	end
 end
