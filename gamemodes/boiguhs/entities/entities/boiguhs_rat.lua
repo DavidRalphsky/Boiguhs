@@ -63,11 +63,13 @@ function ENT:RunBehaviour()
 			
 		elseif(self.Hostile) then
 			self:SetEnemy(table.Random(ents.FindByClass("player")))
-			self.loco:FaceTowards(self:GetEnemy():GetPos())
-			self:StartActivity(ACT_WALK)
-			self.loco:SetDesiredSpeed(250)
-			self:ChaseEnemy()
-			self:StartActivity(ACT_IDLE)
+			if IsValid(self:GetEnemy()) then
+				self.loco:FaceTowards(self:GetEnemy():GetPos())
+				self:StartActivity(ACT_WALK)
+				self.loco:SetDesiredSpeed(250)
+				self:ChaseEnemy()
+				self:StartActivity(ACT_IDLE)
+			end
 		end
 		
 		coroutine.yield()
@@ -131,6 +133,8 @@ function ENT:ChaseEnemy(options)
 		end
 		
 		if(self:GetEnemy():IsPlayer() and IsValid(self:GetEnemy()) and self:GetPos():Distance(self:GetEnemy():GetPos()) < 30) then
+			if (self.NextBite or 0) > CurTime() then return end 
+			self.NextBite = CurTime()+1.5
 			self:GetEnemy():ViewPunch(Angle(-10, 0, 0))		
 			self:GetEnemy():TakeDamage(1,self,self) 
 			self.Bite:Play()
