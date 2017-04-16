@@ -18,7 +18,6 @@ function GM:PlayerLoadout(ply)
 	return true
 end
 
-function BlockSuicide(ply)
-	return false
+function GM:CanPlayerSuicide()
+	return false	
 end
-hook.Add("CanPlayerSuicide", "boiguhs_suicide", BlockSuicide)
