@@ -136,57 +136,20 @@ function SpawnARat()
 	end)
 end
 
-function SpawnRatSwarm()
-	local rat = ents.Create("boiguhs_rat")
-	rat:SetPos(Vector(0,0,-60))
-	rat:Spawn()
-	
-	local rat2 = ents.Create("boiguhs_rat")
-	rat2:SetPos(Vector(0,0,-60))
-	rat2:Spawn()
-	
-	local rat3 = ents.Create("boiguhs_rat")
-	rat3:SetPos(Vector(0,0,-60))
-	rat3:Spawn()
-	
-	local rat4 = ents.Create("boiguhs_rat")
-	rat4:SetPos(Vector(0,0,-60))
-	rat4:Spawn()
-	
-	local rat5 = ents.Create("boiguhs_rat")
-	rat5:SetPos(Vector(0,0,-60))
-	rat5:Spawn()
-	
-	local rat6 = ents.Create("boiguhs_rat")
-	rat6:SetPos(Vector(0,0,-60))
-	rat6:Spawn()
-	
-	local rat7 = ents.Create("boiguhs_rat")
-	rat7:SetPos(Vector(0,0,-60))
-	rat7:Spawn()
-	
-	local rat8 = ents.Create("boiguhs_rat")
-	rat8:SetPos(Vector(0,0,-60))
-	rat8:Spawn()
-	
-	local rat9 = ents.Create("boiguhs_rat")
-	rat9:SetPos(Vector(0,0,-60))
-	rat9:Spawn()
-	
-	local rat10 = ents.Create("boiguhs_rat")
-	rat10:SetPos(Vector(0,0,-60))
-	rat10:Spawn()
-			
+function SpawnRatSwarm( num )
+	num = num or 10
+	local rattab = {}
+	for i = 1, num do
+		rattab[ i ] = ents.Create("boiguhs_rat")
+		rattab[ i ]:SetPos( Vector( 0, 0,-60 ) )
+		rattab[ i ]:Spawn()
+	end		
 	timer.Simple(25,function() 
-		if IsValid(rat)   then rat:Remove()   end 
-		if IsValid(rat2)  then rat2:Remove()  end 
-		if IsValid(rat3)  then rat3:Remove()  end 
-		if IsValid(rat4)  then rat4:Remove()  end 
-		if IsValid(rat5)  then rat5:Remove()  end 
-		if IsValid(rat6)  then rat6:Remove()  end 
-		if IsValid(rat7)  then rat7:Remove()  end 
-		if IsValid(rat8)  then rat8:Remove()  end 
-		if IsValid(rat9)  then rat9:Remove()  end 
-		if IsValid(rat10) then rat10:Remove() end 
+		for _, rat in ipairs( rattab ) do
+			if IsValid( rat ) then
+				rat:Remove()
+				rattab[ _ ] = nil
+			end
+		end
 	end)
 end
