@@ -172,3 +172,15 @@ end
 function GM:GetBurger(name)
     return table.Copy(BurgerTable[name]) or false
 end
+
+
+function GM:PostCleanupMap()
+    local trashCan = ents.Create( "boiguhs_trashcan" )
+    trashCan:SetPos(Vector(761, 606, -29))
+    trashCan:SetAngles(Angle( 0, -81, 0))
+	trashCan:Spawn()
+    local Phys = trashCan:GetPhysicsObject()
+    if IsValid(Phys) then
+        Phys:EnableMotion( false )
+    end
+end
