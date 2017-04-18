@@ -130,7 +130,7 @@ function ENT:CalcPay(tbl)
 			money:SetAngles(Angle(math.random(0,180),math.random(0,180),math.random(0,180)))
 			money:Spawn()
 			money:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-			money:SetVelocity((self:GetForward()*150)+(self:GetUp()*150))
+			money:GetPhysicsObject():SetVelocity((self:GetForward()*150)+(self:GetUp()*150))
 		end
 	end
 	
