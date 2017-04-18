@@ -125,7 +125,6 @@ function ENT:CalcPay(tbl)
 	for i=1, num do
 		if SERVER then
 			local money = ents.Create("boiguhs_money")
-            print(money)
 			if(!IsValid(money)) then return end
 			money:SetPos(self:LocalToWorld(Vector(0,0,50)))
 			money:SetAngles(Angle(math.random(0,180),math.random(0,180),math.random(0,180)))

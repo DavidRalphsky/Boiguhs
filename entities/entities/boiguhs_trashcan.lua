@@ -5,23 +5,17 @@ ENT.Spawnable = true
 ENT.AdminOnly = false
 
 AddCSLuaFile()
-local EntBlackList = {
-    player,
-    boiguhs_grill,
-    boiguhs_supplytruck,
-    boiguhs_customer,
-    boiguhs_car,
-    boiguhs_register,
-    boiguhs_producecrate,
-    boiguhs_meatcrate,
-    boiguhs_fireextinguisher,
-    boiguhs_customerspawner,
-    boiguhs_carspawner,
-    boiguhs_buncrate,
-    ai_truckspawn,
-    ai_drivethrough,
-    ai_customer_seatpoint,
-    boiguhs_money,
+local EntWhiteList = {
+    boiguh_bac = true,
+    boiguh_bot = true,
+    boiguh_let = true,
+    boiguh_che = true,
+    boiguh_pat = true,
+    boiguh_tom = true,
+    boiguh_top = true,
+    boiguhs_ratcorpse = true,
+    boiguhs_money = true,
+    boiguhs_fireextinguisher = true,
     
 }
 function ENT:Initialize()
@@ -35,11 +29,10 @@ function ENT:Initialize()
     if (IsValid(phys)) then phys:Wake() end
 end
 function ENT:Touch(ent)    
-    if(ent:GetClass() == "boiguhs_grill") then
+    if EntWhiteList[ent:GetClass()] then
         if (self.NextTouch or 0) > CurTime() then return end
         self.NextTouch = CurTime()+0.1
         self:GetPhysicsObject():Wake()
+        SafeRemoveEntity(ent)
     end
-    if ent:IsPlayer() then return end
-    SafeRemoveEntity(ent)
 end
