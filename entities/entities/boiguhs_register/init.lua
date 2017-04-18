@@ -23,7 +23,7 @@ end
 function ENT:Touch(ent)
 	if (self.Next or 0) > CurTime() then return end 
 	self.Next = CurTime()+0.5 
-	if(ent:GetModel() == "models/hunter/plates/plate025x05.mdl") then
+	if(ent:GetClass() == "boiguhs_money") then
 		ent:Remove()
 		GAMEMODE:AddMoney(5)
 	end

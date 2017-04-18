@@ -103,39 +103,8 @@ function ENT:CalcPay(tbl)
 	self.Seated = false
 	
 	local req   = self.Request
-	local order = {"Invalid order"}
-	
-	if(req == "cheese") then
-		order = {"boiguh_che","boiguh_pat"}
-	
-	elseif(req == "bigmac") then
-		order = {"boiguh_let","boiguh_pat","boiguh_bot","boiguh_che","boiguh_pat"}
-		
-	elseif(req == "cheeseandlettuce") then
-		order = {"boiguh_let","boiguh_che","boiguh_pat"}
-		
-	elseif(req == "doublecheese") then
-		order = {"boiguh_pat","boiguh_che","boiguh_pat"}
-		
-	elseif(req == "lettuce") then
-		order = {"boiguh_let","boiguh_pat"}
-		
-	elseif(req == "bacon") then
-		order = {"boiguh_bac","boiguh_pat"}
-
-	elseif(req == "baconcheese") then
-		order = {"boiguh_tom","boiguh_bac","boiguh_che","boiguh_pat"}
-		
-	elseif(req == "complicatedcheese") then
-		order = {"boiguh_tom","boiguh_let","boiguh_che","boiguh_pat"}
-		
-	elseif(req == "deluxebacon") then
-		order = {"boiguh_let","boiguh_bac","boiguh_pat","boiguh_bac"}
-		
-	elseif(req == "vegan") then
-		order = {"boiguh_tom","boiguh_let","boiguh_let"}
-	
-	end
+	local order = GAMEMODE:GetBurger(req) or {"Invalid order"}
+    
 	
 	local num = self:ProcessOrder(self.Request,tbl,order)
 	local positive = {"vo/npc/male01/answer32.wav","vo/npc/male01/nice.wav"}
@@ -155,16 +124,14 @@ function ENT:CalcPay(tbl)
 	
 	for i=1, num do
 		if SERVER then
-			local money = ents.Create("prop_physics")
+			local money = ents.Create("boiguhs_money")
+            print(money)
 			if(!IsValid(money)) then return end
-			money:SetModel("models/hunter/plates/plate025x05.mdl")
-			money:SetMaterial("phoenix_storms/fender_white")
-			money:SetColor(Color(0,255,0))
 			money:SetPos(self:LocalToWorld(Vector(0,0,50)))
 			money:SetAngles(Angle(math.random(0,180),math.random(0,180),math.random(0,180)))
 			money:Spawn()
 			money:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
-			money:GetPhysicsObject():SetVelocity((self:GetForward()*150)+(self:GetUp()*150))
+			money:SetVelocity((self:GetForward()*150)+(self:GetUp()*150))
 		end
 	end
 	
@@ -176,8 +143,7 @@ function ENT:CalcPay(tbl)
 end
 
 function ENT:RequestRand()
-	local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
-	local request = table.Random(burgers)
+	local _, request = table.Random( GAMEMODE:GetBurgers() )
 	
 	self.Seat:Request("boiguhs/"..request)
 	self.Request = request
