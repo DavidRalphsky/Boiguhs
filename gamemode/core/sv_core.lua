@@ -116,6 +116,22 @@ function GM:StartGame()
 		
 	timer.UnPause("SpawnBoiguhCustomer")
 	timer.UnPause("SpawnBoiguhCar")
+			
+	local wave = 1	
+	timer.Create("WaveTimer", 300, 0, function() 
+						timer.Pause("SpawnBoiguhCustomer") 
+						timer.Pause("SpawnBoiguhCar")
+						PrintMessage(HUD_PRINTCENTER, "Wave "..wave.." finished. You have 60 seconds to prepare.")
+						timer.Pause("WaveTimer")
+					end)
+
+	timer.Create("WaveTimer2", 360, 0, function() 
+						wave = wave + 1
+						timer.UnPause("SpawnBoiguhCustomer") 
+						timer.UnPause("SpawnBoiguhCar")
+						PrintMessage(HUD_PRINTCENTER, "Wave "..wave.." begun!")
+						timer.UnPause("WaveTimer")
+					end)
 
 	local num1 = (math.random(60,120)/GAMEMODE:GetDifficulty())
 	local num2 = 600
