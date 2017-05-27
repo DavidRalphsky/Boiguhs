@@ -6,3 +6,5 @@ DeriveGamemode("base")
 function GM:Initialize()
 	self.BaseClass.Initialize(self)
 end
+
+include("boiguhs/gamemode/core/sh_core.lua")

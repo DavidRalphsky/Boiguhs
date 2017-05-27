@@ -9,11 +9,11 @@ end
 
 concommand.Add("boiguhs_setdifficulty", function(ply,cmd,args)
 	if(!ply:IsAdmin() or args[1] == nil) then return end
-	if(tonumber(args[1]) > 4 or tonumber(args[1]) < 0) then 
+	if(tonumber(args[1]) > 4 or tonumber(args[1]) < 0) then
 		print("Invalid difficulty!")
 		return
 	end
-	
+
 	GAMEMODE:SetDifficulty(tonumber(args[1]))
 	ply:ConCommand("boiguhs_getdifficulty")
 end)
@@ -21,7 +21,7 @@ end)
 concommand.Add("boiguhs_getdifficulty", function(ply,cmd,args)
 	if(!ply:IsAdmin()) then return end
 	local difficulties = {"Easy","Normal","Hard"}
-	
+
 	print("Boiguhs difficulty set to: "..difficulties[difficulty])
 end)
 
@@ -44,7 +44,7 @@ end
 
 concommand.Add("boiguhs_setmorale", function(ply,cmd,args)
 	if(!ply:IsAdmin() or args[1] == nil) then return end
-	
+
 	GAMEMODE:SetMorale(args[1])
 end)
 
@@ -67,7 +67,7 @@ end
 
 concommand.Add("boiguhs_setmoney", function(ply,cmd,args)
 	if(!ply:IsAdmin() or tonumber(args[1]) == nil) then return end
-	
+
 	GAMEMODE:SetMoney(args[1])
 end)
 
@@ -86,7 +86,7 @@ concommand.Add("boiguhs_debug", function(ply,cmd,args)
 		print("Invalid input!")
 		return
 	end
-	
+
 	GAMEMODE:SetDebug(tonumber(args[1]))
 end)
 
@@ -108,12 +108,12 @@ end
 function GM:StartGame()
 	if started then return false end
 	started = true
-	
-	timer.Simple(0.1, function() game.CleanUpMap() 
+
+	timer.Simple(0.1, function() game.CleanUpMap()
 
 	PrintMessage(HUD_PRINTCENTER, "Boiguhs has started! You have 30 seconds to prepare!")
-	
-		
+
+
 	timer.UnPause("SpawnBoiguhCustomer")
 	timer.UnPause("SpawnBoiguhCar")
 			
@@ -135,7 +135,7 @@ function GM:StartGame()
 
 	local num1 = (math.random(60,120)/GAMEMODE:GetDifficulty())
 	local num2 = 600
-	
+
 	if(GAMEMODE:GetDifficulty() == 3) then num2 = 300 end
 	timer.Create("boiguhs_rat",     num1,0,function() SpawnARat()     end)
 	timer.Create("boiguhs_ratswarm",num2,0,function() SpawnRatSwarm() end)
@@ -146,9 +146,9 @@ function SpawnARat()
 	local rat = ents.Create("boiguhs_rat")
 	rat:SetPos(Vector(0,0,-60))
 	rat:Spawn()
-		
-	timer.Simple(25,function() 
-		if IsValid(rat) then rat:Remove() end 
+
+	timer.Simple(25,function()
+		if IsValid(rat) then rat:Remove() end
 	end)
 end
 
@@ -159,8 +159,8 @@ function SpawnRatSwarm( num )
 		rattab[ i ] = ents.Create("boiguhs_rat")
 		rattab[ i ]:SetPos( Vector( 0, 0,-60 ) )
 		rattab[ i ]:Spawn()
-	end		
-	timer.Simple(25,function() 
+	end
+	timer.Simple(25,function()
 		for _, rat in ipairs( rattab ) do
 			if IsValid( rat ) then
 				rat:Remove()
@@ -168,4 +168,16 @@ function SpawnRatSwarm( num )
 			end
 		end
 	end)
+end
+
+
+function GM:PostCleanupMap()
+    local trashCan = ents.Create( "boiguhs_trashcan" )
+    trashCan:SetPos(Vector(761, 606, -29))
+    trashCan:SetAngles(Angle( 0, -81, 0))
+	trashCan:Spawn()
+    local Phys = trashCan:GetPhysicsObject()
+    if IsValid(Phys) then
+        Phys:EnableMotion( false )
+    end
 end
