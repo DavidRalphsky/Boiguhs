@@ -154,7 +154,6 @@ function ENT:CalcPay(tbl)
 			timer.Simple(1, function() self:EmitSound(table.Random(negative),80) end)
 			num = -5
 	end
-
 	GAMEMODE:AddMorale(num)
 	if GAMEMODE:Debug() == 1 then print("Morale set to "..GAMEMODE:GetMorale()) end
 	
@@ -174,9 +173,7 @@ function ENT:CalcPay(tbl)
 	end
 	
 	timer.Simple(1, function() 
-		if(self.IsSick == false and !self.Run) then 
-			self.Leaving = true 
-		end 
+		self.Leaving = true 
 	end)
 end
 
@@ -192,13 +189,6 @@ function ENT:RunBehaviour()
 			self.loco:SetDesiredSpeed(200)
 			self:MoveToPos(self.Stop.Exit)
 			self:Remove()	
-			
-		elseif(self.Run) then
-			self:StartActivity(ACT_RUN)
-			self.loco:SetDesiredSpeed(800)
-			self.loco:SetAcceleration(900)
-			self:MoveToPos(self.Stop.Exit)
-			self:Remove()
 		end
 		
 		coroutine.yield()

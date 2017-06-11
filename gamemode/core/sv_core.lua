@@ -15,7 +15,7 @@ end
 
 concommand.Add("boiguhs_setdifficulty", function(ply,cmd,args)
 	if(!ply:IsAdmin() or args[1] == nil) then return end
-	if(tonumber(args[1]) > 4 or tonumber(args[1]) < 1) then 
+	if(tonumber(args[1]) > 3 or tonumber(args[1]) < 1) then 
 		print("Invalid difficulty!")
 		return
 	end
