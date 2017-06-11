@@ -2,10 +2,7 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include("shared.lua")
 
-function ENT:Initialize()
-	self.Name = "Top Bun"
-	self.Desc = "Final piece of a Boiguh"
-	
+function ENT:Initialize()	
 	self:SetModel("models/hunter/plates/plate025x025.mdl")
 
 	if SERVER then
@@ -69,6 +66,7 @@ end
 -- GRILL STUFF
 function ENT:StartTouch(ent)
 	if(ent:GetClass() == "boiguhs_grill") then
+		self:EmitSound("ambient/levels/canals/toxic_slime_sizzle"..math.random(3,4)..".wav")
 		self.Sizzle:SetSoundLevel(60)
 		self.Sizzle:Play()
 	end

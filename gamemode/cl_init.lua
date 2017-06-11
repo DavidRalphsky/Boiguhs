@@ -1,24 +1,44 @@
---[[local normal = {"boiguh_bot","boiguh_top","boiguh_che","boiguh_let","boiguh_tom","boiguh_pat","boiguh_bac","boiguhs_grill","boiguhs_register","boiguhs_fireextinguisher"}
+local difficulty = 0
+net.Receive("boiguhs_difficulty",function()
+	difficulty = net.ReadInt(3)
+end)
+
+local normal = {"boiguh_bot","boiguh_top","boiguh_che","boiguh_let","boiguh_tom","boiguh_pat","boiguh_bac","boiguhs_grill","boiguhs_register","boiguhs_fireextinguisher"}
 hook.Add("PreDrawHalos", "boiguhs_tutorialhalos", function()
-	--if GAMEMODE:GetDifficulty() == 1 then
+	if difficulty == 1 then
 		local ent = LocalPlayer():GetEyeTrace().Entity
-		if table.HasValue(normal,ent:GetClass()) then
+		if !IsValid(ent) then return end
+		if table.HasValue(normal,ent:GetClass()) and LocalPlayer():GetPos():Distance(ent:GetPos()) < 150 then
 			halo.Add({ent}, Color(0,255,0,255), 3, 3, 1, true, true)
 		end
-	--end
+	end
 end)
 
 hook.Add("PostDrawOpaqueRenderables","boiguhs_tutorialtext", function()
 	local ent = LocalPlayer():GetEyeTrace().Entity
-	if table.HasValue(normal,ent:GetClass()) and LocalPlayer():GetPos():Distance(ent:GetPos()) < 100  then
-		local pos = ent:GetPos() + ent:OBBCenter() + ent:GetUp()*5
+	if !IsValid(ent) or difficulty != 1 then return end
+	
+	-- Hey, why does Entity:GetName() return nil on clientisde? Seems weird that that would happen. I mean, GetClass() works fine.
+	if (table.HasValue(normal,ent:GetClass())) and LocalPlayer():GetPos():Distance(ent:GetPos()) < 150  then
+		local pos = ent:GetPos() + Vector(0,0,5)
 		local yaw = LocalPlayer():EyeAngles().y-90
-		cam.Start3D2D(pos,Angle(0,yaw,90), 0.5)
-			draw.SimpleText(ent.Name or "Error","DermaDefault",0,-35,Color(255, 255, 255, 255),TEXT_ALIGN_CENTER)
-			draw.SimpleText(ent.Desc or "Error","DermaDefault",0,-25,Color(255, 255, 255, 255),TEXT_ALIGN_CENTER)
+		
+		if ent:GetClass() == "boiguhs_fireextinguisher" then
+			pos = ent:GetPos() + ent:GetUp()*10 + Vector(0,0,5)
+		
+		elseif ent:GetClass() == "boiguhs_grill" then
+			pos = ent:GetPos() + Vector(0,0,25)
+		
+		elseif ent:GetClass() == "boiguhs_register" then
+			pos = ent:GetPos() + ent:GetForward()*2 + Vector(0,0,15)
+		end
+		
+		cam.Start3D2D(pos,Angle(0,yaw,90), 0.2)
+			draw.SimpleText(ent.Name or "Something bugged out","DermaDefault",0,-35,Color(255, 255, 255, 255),TEXT_ALIGN_CENTER)
+			draw.SimpleText(ent.Desc or "It's probably David's fault","DermaDefault",0,-25,Color(255, 255, 255, 255),TEXT_ALIGN_CENTER)
 		cam.End3D2D()
 	end
-end)]]--
+end)
 
 local hat = ClientsideModel("models/props/cs_office/snowman_hat.mdl")
 hat:SetNoDraw(true)

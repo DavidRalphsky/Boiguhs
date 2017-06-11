@@ -28,6 +28,7 @@ end
 local sizzle
 function ENT:StartTouch(ent)
 	if(ent:GetClass() == "boiguhs_grill") then
+		self:EmitSound("ambient/levels/canals/toxic_slime_sizzle"..math.random(3,4)..".wav")
 		sizzle = CreateSound(self,"General.BurningFlesh")
 		sizzle:SetSoundLevel(60)
 		sizzle:Play()

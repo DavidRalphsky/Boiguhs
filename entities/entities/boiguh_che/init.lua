@@ -27,6 +27,7 @@ end
 -- GRILL STUFF
 function ENT:StartTouch(ent)
 	if(ent:GetClass() == "boiguhs_grill") then
+		self:EmitSound("ambient/levels/canals/toxic_slime_sizzle"..math.random(3,4)..".wav")
 		self.Sizzle:SetSoundLevel(60)
 		self.Sizzle:Play()
 	end

@@ -1,6 +1,12 @@
+util.AddNetworkString("boiguhs_difficulty")
+
 local difficulty = 1
 function GM:SetDifficulty(diff)
-	difficulty = diff
+	difficulty = diff	
+	
+	net.Start("boiguhs_difficulty")
+		net.WriteInt(difficulty, 3)
+	net.Broadcast()
 end
 
 function GM:GetDifficulty()
@@ -9,7 +15,7 @@ end
 
 concommand.Add("boiguhs_setdifficulty", function(ply,cmd,args)
 	if(!ply:IsAdmin() or args[1] == nil) then return end
-	if(tonumber(args[1]) > 4 or tonumber(args[1]) < 0) then 
+	if(tonumber(args[1]) > 4 or tonumber(args[1]) < 1) then 
 		print("Invalid difficulty!")
 		return
 	end
@@ -45,7 +51,7 @@ end
 concommand.Add("boiguhs_setmorale", function(ply,cmd,args)
 	if(!ply:IsAdmin() or args[1] == nil) then return end
 	
-	GAMEMODE:SetMorale(args[1])
+	GAMEMODE:SetMorale(tonumber(args[1]))
 end)
 
 local money = 0
@@ -68,7 +74,7 @@ end
 concommand.Add("boiguhs_setmoney", function(ply,cmd,args)
 	if(!ply:IsAdmin() or tonumber(args[1]) == nil) then return end
 	
-	GAMEMODE:SetMoney(args[1])
+	GAMEMODE:SetMoney(tonumber(args[1]))
 end)
 
 local qdebug = 0
@@ -111,12 +117,15 @@ function GM:StartGame()
 	
 	timer.Simple(0.1, function() game.CleanUpMap() 
 
+	GAMEMODE:SetDifficulty(difficulty) -- Send the net message
+	
 	PrintMessage(HUD_PRINTCENTER, "Boiguhs has started! You have 30 seconds to prepare!")
 	
+	Entity(136):Fire("press")
 		
 	timer.UnPause("SpawnBoiguhCustomer")
 	timer.UnPause("SpawnBoiguhCar")
-			
+	
 	local wave = 1	
 	timer.Create("WaveTimer", 300, 0, function() 
 						timer.Pause("SpawnBoiguhCustomer") 
@@ -152,15 +161,15 @@ function SpawnARat()
 	end)
 end
 
-function SpawnRatSwarm( num )
-	num = num or 10
+function SpawnRatSwarm()
 	local rattab = {}
-	for i = 1, num do
+	for i = 1, 10 do
 		rattab[ i ] = ents.Create("boiguhs_rat")
 		rattab[ i ]:SetPos( Vector( 0, 0,-60 ) )
 		rattab[ i ]:Spawn()
-	end		
-	timer.Simple(25,function() 
+	end
+	
+	timer.Simple(25, function()
 		for _, rat in ipairs( rattab ) do
 			if IsValid( rat ) then
 				rat:Remove()

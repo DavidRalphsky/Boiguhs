@@ -18,6 +18,6 @@ function GM:PlayerLoadout(ply)
 	return true
 end
 
-function GM:CanPlayerSuicide()
-	return false	
+function CanPlayerSuicide()
+	return false
 end

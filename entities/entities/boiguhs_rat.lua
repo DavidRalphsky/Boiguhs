@@ -167,10 +167,8 @@ function ENT:OnInjured(dmg)
 			end		
 		end)
 	end
-	
 	self:Remove()
 end
-
 
 list.Set("NPC", "boiguhs_rat", {
 	Name = "Boiguhs Rat",

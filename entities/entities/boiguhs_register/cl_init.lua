@@ -1,4 +1,7 @@
 include("shared.lua")
+
+ENT.Name = "Cash Register"
+ENT.Desc = "Greed, for lack of a better word, is good"
 function ENT:Draw()
 	self:DrawModel()
 	
