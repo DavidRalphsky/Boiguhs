@@ -4,7 +4,7 @@ net.Receive("boiguhs_difficulty",function()
 end)
 
 local normal = {"boiguh_bot","boiguh_top","boiguh_che","boiguh_let","boiguh_tom","boiguh_pat","boiguh_bac","boiguhs_grill","boiguhs_register","boiguhs_fireextinguisher"}
-hook.Add("PreDrawHalos", "boiguhs_tutorialhalos", function()
+function GM:PreDrawHalos()
 	if difficulty == 1 then
 		local ent = LocalPlayer():GetEyeTrace().Entity
 		if !IsValid(ent) then return end
@@ -12,9 +12,9 @@ hook.Add("PreDrawHalos", "boiguhs_tutorialhalos", function()
 			halo.Add({ent}, Color(0,255,0,255), 3, 3, 1, true, true)
 		end
 	end
-end)
+end
 
-hook.Add("PostDrawOpaqueRenderables","boiguhs_tutorialtext", function()
+function GM:PostDrawOpaqueRenderables()
 	local ent = LocalPlayer():GetEyeTrace().Entity
 	if !IsValid(ent) or difficulty != 1 then return end
 	
@@ -38,11 +38,11 @@ hook.Add("PostDrawOpaqueRenderables","boiguhs_tutorialtext", function()
 			draw.SimpleText(ent.Desc or "It's probably David's fault","DermaDefault",0,-25,Color(255, 255, 255, 255),TEXT_ALIGN_CENTER)
 		cam.End3D2D()
 	end
-end)
+end
 
 local hat = ClientsideModel("models/props/cs_office/snowman_hat.mdl")
 hat:SetNoDraw(true)
-hook.Add("PostPlayerDraw", "boiguhs_accessories", function(ply)
+function GM:PostPlayerDraw(ply)
 	if not IsValid(ply) or not ply:Alive() then return end
 	
 	--[[local Distance = LocalPlayer():GetPos():Distance( ply:GetPos() ) --Get the distance between you and the player
@@ -90,4 +90,4 @@ hook.Add("PostPlayerDraw", "boiguhs_accessories", function(ply)
 	hat:DrawModel()
 	hat:SetRenderOrigin()
 	hat:SetRenderAngles()
-end) 
+end
