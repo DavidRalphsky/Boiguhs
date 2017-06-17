@@ -160,7 +160,7 @@ function GM:StartGame()
 					end)
 
 	local num1 = (math.random(60,120)/GAMEMODE:GetDifficulty())
-	local num2 = 200
+	local num2 = 600
 	
 	if(GAMEMODE:GetDifficulty() == 3) then num2 = 300 end
 	timer.Create("boiguhs_rat",     num1,0,function() SpawnARat()     end)
