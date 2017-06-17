@@ -34,15 +34,15 @@ end
 
 function ENT:OnContact(_ent)
 	if !self.Seated then return end
-	
+		
 	local ent = _ent
 	
 	if(ent:GetParent():IsValid()) then ent = _ent:GetParent() end
 	if(#ent:GetChildren()<1)      then return end
 	
 	if(ent:GetClass()=="boiguh_bot" and !ent.Active) then
-		for i=1, #ent:GetChildren() do
-			if(ent:IsOnFire() or ent:GetChildren()[i]:IsOnFire()) then 
+		for k,v in pairs(ent:GetChildren()) do
+			if(ent:IsOnFire() or v:IsOnFire()) then 
 				self:EmitSound("ambient/fire/ignite.wav") self.Run = true 
 				self:Ignite(60) 
 			end
@@ -57,11 +57,15 @@ end
 function IsCooked(ent)
 	if GAMEMODE:Debug() == 1 then print(ent:GetClass()) PrintTable(ent:GetColor()) end
 	
-	if(IsValid(ent) and ent:GetColor().r > (45+(GAMEMODE:GetDifficulty()*10)) and ent:GetColor().r < (150-(GAMEMODE:GetDifficulty()*10))) then return 1 else return 0 end
+	if(IsValid(ent) and ent:GetColor().r > (45+(GAMEMODE:GetDifficulty()*10)) and ent:GetColor().r < (150-(GAMEMODE:GetDifficulty()*10))) then 
+		return 1 
+	else 
+		return 0 
+	end
 end
 
-function ENT:ProcessOrder(req,tbl,order)
-	table.remove(tbl,1)
+function ENT:ProcessOrder(req,_tbl,order)
+	local tbl   = table.Reverse(_tbl)
 	local num = 0
 	
 	for i=1, #tbl do
@@ -106,35 +110,34 @@ function ENT:CalcPay(tbl)
 	local order = {"Invalid order"}
 	
 	if(req == "cheese") then
-		order = {"boiguh_che","boiguh_pat"}
+		order = {"boiguh_pat","boiguh_che","boiguh_top"}
 	
 	elseif(req == "bigmac") then
-		order = {"boiguh_let","boiguh_pat","boiguh_bot","boiguh_che","boiguh_pat"}
+		order = {"boiguh_pat","boiguh_che","boiguh_bot","boiguh_pat","boiguh_let","boiguh_top"}
 		
 	elseif(req == "cheeseandlettuce") then
-		order = {"boiguh_let","boiguh_che","boiguh_pat"}
+		order = {"boiguh_pat","boiguh_che","boiguh_let","boiguh_top"}
 		
 	elseif(req == "doublecheese") then
-		order = {"boiguh_pat","boiguh_che","boiguh_pat"}
+		order = {"boiguh_pat","boiguh_che","boiguh_pat","boiguh_top"}
 		
 	elseif(req == "lettuce") then
-		order = {"boiguh_let","boiguh_pat"}
+		order = {"boiguh_pat","boiguh_let","boiguh_top"}
 		
 	elseif(req == "bacon") then
-		order = {"boiguh_bac","boiguh_pat"}
+		order = {"boiguh_pat","boiguh_bac","boiguh_top"}
 
 	elseif(req == "baconcheese") then
-		order = {"boiguh_tom","boiguh_bac","boiguh_che","boiguh_pat"}
+		order = {"boiguh_pat","boiguh_che","boiguh_bac","boiguh_tom","boiguh_top"}
 		
 	elseif(req == "complicatedcheese") then
-		order = {"boiguh_tom","boiguh_let","boiguh_che","boiguh_pat"}
+		order = {"boiguh_pat","boiguh_che","boiguh_let","boiguh_tom","boiguh_top"}
 		
 	elseif(req == "deluxebacon") then
-		order = {"boiguh_let","boiguh_bac","boiguh_pat","boiguh_bac"}
+		order = {"boiguh_bac","boiguh_pat","boiguh_bac","boiguh_let","boiguh_top"}
 		
 	elseif(req == "vegan") then
-		order = {"boiguh_tom","boiguh_let","boiguh_let"}
-	
+		order = {"boiguh_let","boiguh_let","boiguh_tom","boiguh_top"}
 	end
 	
 	local num = self:ProcessOrder(self.Request,tbl,order)

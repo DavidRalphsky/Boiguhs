@@ -3,6 +3,14 @@ AddCSLuaFile()
 ENT.Base 			= "base_nextbot"
 ENT.Spawnable		= false
 
+function ENT:SetRequest(val)
+	self.Entity:SetNWString("BoigCarRequest",val)
+end
+
+function ENT:GetRequest()
+	return self.Entity:GetNWInt("BoigCarRequest")
+end
+
 function ENT:Initialize()
 	self:SetColor(Color(0,0,0,0))
 	self:SetRenderMode(4)
@@ -36,13 +44,14 @@ function ENT:Initialize()
 	
 	self.Entity:SetCollisionBounds(Vector(-30,-30,0), Vector(30,30,60))
 	
-	math.randomseed(os.time())
-	local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
-	self.Request = table.Random(burgers)
+	if SERVER then
+		local burgers = {"cheese","bigmac","cheeseandlettuce","doublecheese","lettuce","bacon","baconcheese","complicatedcheese","deluxebacon","vegan"}
+		self:SetRequest(table.Random(burgers))
+	end
 end
 
 function ENT:Draw()
-	render.SetMaterial(Material("boiguhs/"..self.Request))
+	render.SetMaterial(Material("boiguhs/"..self:GetRequest()))
 	render.DrawSprite(self.Entity:LocalToWorld(Vector(0,0,80)),32,32,Color(255,255,255,255))
 end
 
@@ -54,8 +63,8 @@ function ENT:OnContact(_ent)
 	if(table.Count(ent:GetChildren())<1) then return end
 	
 	if(ent:GetClass()=="boiguh_bot" and ent.Active == false) then
-		for i=1, table.Count(ent:GetChildren()) do
-			if(ent:IsOnFire() or ent:GetChildren()[i]:IsOnFire()) then self.Explode = true self.Driver:Ignite(60) end
+		for k,v in pairs(ent:GetChildren()) do
+			if(ent:IsOnFire() or v:IsOnFire()) then self.Explode = true self.Driver:Ignite(60) end
 		end
 		self:EmitSound("vo/SandwichEat09.mp3",65,math.random(80,150))
 		self:CalcPay(ent:GetChildren())
@@ -107,7 +116,7 @@ function ENT:ProcessOrder(req,tbl,order)
 end
 
 function ENT:CalcPay(tbl)	
-	local req   = self.Request
+	local req   = self:GetRequest()
 	local order = {"Invalid order"}
 	
 	if(req == "cheese") then
@@ -141,7 +150,7 @@ function ENT:CalcPay(tbl)
 		order = {"boiguh_tom","boiguh_let","boiguh_let"}
 	end
 	
-	local num = self:ProcessOrder(self.Request,tbl,order)
+	local num = self:ProcessOrder(self:GetRequest(),tbl,order)
 	
 	local positive = {"vo/npc/male01/answer32.wav","vo/npc/male01/nice.wav"}
 	local negative = {"vo/npc/male01/question26.wav"}
@@ -206,7 +215,7 @@ function ENT:FindStop()
 		self:SetPos(self.Stop:GetPos())
 		self:SetAngles(self.Stop:GetAngles())
 		self:SetRenderMode(0)
-		if GAMEMODE:Debug() == 1 then print("I want a "..self.Request) end
+		if GAMEMODE:Debug() == 1 then print("I want a "..self:GetRequest()) end
 		timer.Simple(120, function() if(IsValid(self) and !self.Leaving) then GAMEMODE:SubtractMorale(5) self.Leaving = true end end)
 	end
 end

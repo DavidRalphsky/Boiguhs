@@ -42,10 +42,10 @@ end
 function ENT:SetEnemy(ent)
 	self.Enemy = ent
 end
+
 function ENT:GetEnemy()
 	return self.Enemy
 end
-
 
 function ENT:RunBehaviour()	
 	while (true) do

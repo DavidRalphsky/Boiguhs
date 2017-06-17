@@ -96,8 +96,27 @@ concommand.Add("boiguhs_debug", function(ply,cmd,args)
 	GAMEMODE:SetDebug(tonumber(args[1]))
 end)
 
+local wave = 1	
+function GM:GetWave()
+	return wave
+end
+
+function GM:SetWave(num)
+	if !IsValid(tonumber(num)) then return end
+	wave = num
+end
+
+concommand.Add("boiguhs_getwave", function(ply,cmd,args)
+	print(wave)
+end)
+
+concommand.Add("boiguhs_setwave", function(ply,cmd,args)
+	if(!ply:IsAdmin() or args[1] == nil) then return end	
+	GAMEMODE:SetWave(tonumber(args[1]))
+end)
+
 function GM:CallTruck()
-	local cost = 40+(GAMEMODE:GetDifficulty()*10)
+	local cost = 40+(GAMEMODE:GetDifficulty()*GAMEMODE:GetWave()*10)
 	if(GAMEMODE:GetMoney() > cost) then
 		GAMEMODE:SubtractMoney(cost)
 		timer.Simple(5, function()
@@ -121,29 +140,27 @@ function GM:StartGame()
 	
 	PrintMessage(HUD_PRINTCENTER, "Boiguhs has started! You have 30 seconds to prepare!")
 	
-	Entity(136):Fire("press")
-		
 	timer.UnPause("SpawnBoiguhCustomer")
 	timer.UnPause("SpawnBoiguhCar")
 	
-	local wave = 1	
-	timer.Create("WaveTimer", 300, 0, function() 
+	
+	timer.Create("WaveTimer", 200, 0, function() 
 						timer.Pause("SpawnBoiguhCustomer") 
 						timer.Pause("SpawnBoiguhCar")
-						PrintMessage(HUD_PRINTCENTER, "Wave "..wave.." finished. You have 60 seconds to prepare.")
+						PrintMessage(HUD_PRINTCENTER, "Wave "..wave.." has finished. You have 60 seconds to prepare.")
 						timer.Pause("WaveTimer")
 					end)
 
-	timer.Create("WaveTimer2", 360, 0, function() 
+	timer.Create("WaveTimer2", 320, 0, function() 
 						wave = wave + 1
 						timer.UnPause("SpawnBoiguhCustomer") 
 						timer.UnPause("SpawnBoiguhCar")
-						PrintMessage(HUD_PRINTCENTER, "Wave "..wave.." begun!")
+						PrintMessage(HUD_PRINTCENTER, "Wave "..wave.." has begun!")
 						timer.UnPause("WaveTimer")
 					end)
 
 	local num1 = (math.random(60,120)/GAMEMODE:GetDifficulty())
-	local num2 = 600
+	local num2 = 200
 	
 	if(GAMEMODE:GetDifficulty() == 3) then num2 = 300 end
 	timer.Create("boiguhs_rat",     num1,0,function() SpawnARat()     end)
@@ -163,17 +180,22 @@ end
 
 function SpawnRatSwarm()
 	local rattab = {}
+	
+	local ratking = ents.Create("boiguhs_ratking")
+	ratking:SetPos(Vector(30, 0, -62))
+	ratking:Spawn()
+		
 	for i = 1, 10 do
-		rattab[ i ] = ents.Create("boiguhs_rat")
-		rattab[ i ]:SetPos( Vector( 0, 0,-60 ) )
-		rattab[ i ]:Spawn()
+		rattab[i] = ents.Create("boiguhs_rat")
+		rattab[i]:SetPos(Vector(0, 0,-60))
+		rattab[i]:Spawn()
 	end
 	
 	timer.Simple(25, function()
 		for _, rat in ipairs( rattab ) do
 			if IsValid( rat ) then
 				rat:Remove()
-				rattab[ _ ] = nil
+				rattab[_] = nil
 			end
 		end
 	end)
